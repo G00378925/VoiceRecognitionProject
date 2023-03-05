@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<grammar version="1.0" mode="voice" root="commands" xml:lang="en" tag-format="semantics/1.0" xmlns="http://www.w3.org/2001/06/grammar">
+    <rule id="commands">
+        <one-of>
+            <item><ruleref uri="#ADD_ROD"/></item>
+            <item><ruleref uri="#REMOVE_ROD"/></item>
+
+            <item><ruleref uri="#MOVE_DISK_BY_COLOUR"/></item>
+            <item><ruleref uri="#MOVE_FROM_ROD_TO_ROD"/></item>
+
+            <item><ruleref uri="#RESET"/></item>
+            <item><ruleref uri="#SHOW_MOVE_COUNT"/></item>
+            <item><ruleref uri="#SHUFFLE"/></item>
+        </one-of>
+    </rule>
+
+    <rule id="COLOURS">
+        <one-of>
+            <item><item>RED</item><tag>out = "RED";</tag></item>
+            <item><item>GREY</item><tag>out = "GREY";</tag></item>
+            <item><item>GREEN</item><tag>out = "GREEN";</tag></item>
+            <item><item>YELLOW</item><tag>out = "YELLOW";</tag></item>
+            <item><item>CYAN</item><tag>out = "CYAN";</tag></item>
+            <item><item>BLACK</item><tag>out = "BLACK";</tag></item>
+            <item><item>MAGENTA</item><tag>out = "MAGENTA";</tag></item>
+            <item><item>WHITE</item><tag>out = "WHITE";</tag></item>
+        </one-of>
+    </rule>
+
+    <rule id="FUNCTION_WORDS">
+        <one-of>
+            <item>A</item>
+            <item>THE</item>
+        </one-of>
+    </rule>
+
+    <!-- RULE ONE -->
+    <rule id="ADD_ROD">
+        <tag>out.action = "ADD_ROD";</tag>
+        <one-of>
+            <item>ADD</item>
+            <item>APPEND</item>
+        </one-of>
+
+        <item repeat="0-1"><ruleref uri="#FUNCTION_WORDS"/></item>
+
+        <one-of>
+            <item>ROD</item>
+        </one-of>
+    </rule>
+
+    <!-- RULE TWO -->
+    <rule id="REMOVE_ROD">
+        <tag>out.action = "REMOVE_ROD";</tag>
+        <one-of>
+            <item>DELETE</item>
+            <item>DESTROY</item>
+            <item>REMOVE</item>
+        </one-of>
+
+        <item repeat="0-1"><ruleref uri="#FUNCTION_WORDS"/></item>
+
+        <item>ROD</item>
+    </rule>
+
+    <!-- RULE THREE -->
+    <rule id="MOVE_DISK_BY_COLOUR">
+        <tag>out.action = "MOVE_DISK_BY_COLOUR";</tag>
+        <item>MOVE</item>
+
+        <item><ruleref uri="#COLOURS"/></item>
+        <tag>out.fromColour = rules.latest();</tag>
+        <item>DISK</item>
+        <item>TO</item>
+
+        <item><ruleref uri="#COLOURS"/></item>
+        <tag>out.toColour = rules.latest();</tag>
+        <item>ROD</item>
+    </rule>
+
+    <!-- RULE FOUR -->
+    <rule id="MOVE_FROM_ROD_TO_ROD">
+        <tag>out.action = "MOVE_FROM_ROD_TO_ROD";</tag>
+        <item>MOVE</item>
+        <item repeat="0-1">DISK</item>
+        <item>FROM</item>
+
+        <item><ruleref uri="#COLOURS"/></item>
+        <tag>out.fromColour = rules.latest();</tag>
+        <item>ROD</item>
+        <item>TO</item>
+    
+        <item><ruleref uri="#COLOURS"/></item>
+        <tag>out.toColour = rules.latest();</tag>
+        <item>ROD</item>
+    </rule>
+
+    <!-- RULE FIVE -->
+    <rule id="RESET">
+        <tag>out.action = "RESET";</tag>
+        <one-of>
+            <item>ORDER</item>
+            <item>SORT</item>
+            <item>RESET</item>
+        </one-of>
+
+        <item repeat="0-1"><ruleref uri="#FUNCTION_WORDS"/></item>
+        
+        <one-of>
+            <item>GAME</item>
+            <item>STATE</item>
+        </one-of>
+    </rule>
+
+    <!-- RULE SIX -->
+    <rule id="SHOW_MOVE_COUNT">
+        <tag>out.action = "SHOW_MOVE_COUNT";</tag>
+        <one-of>
+            <item>DISPLAY</item>
+            <item>SHOW</item>
+        </one-of>
+
+        <one-of>
+            <item>CHANGE</item>
+            <item>MOVE</item>
+        </one-of>
+
+        <item>COUNT</item>
+    </rule>        
+
+    <!-- RULE SEVEN -->
+    <rule id="SHUFFLE">
+        <tag>out.action = "SHUFFLE";</tag>
+        <one-of>
+            <item>MIX</item>
+            <item>SHUFFLE</item>
+            <item>RANDOM</item>
+            <item>RANDOMIZE</item>
+            <item>RANDOMISE</item>
+        </one-of>
+
+        <item repeat="0-1"><ruleref uri="#FUNCTION_WORDS"/></item>
+
+        <one-of>
+            <item>GAME</item>
+            <item>STATE</item>
+        </one-of>
+    </rule>
+</grammar>
